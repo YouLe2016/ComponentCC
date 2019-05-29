@@ -14,6 +14,20 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/textView"/>
+
+    <Button
+            android:text="Go to Login module"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:typeface="normal"
+            android:textAllCaps="false"/>
 
 </android.support.constraint.ConstraintLayout>
