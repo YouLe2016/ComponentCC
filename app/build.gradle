@@ -4,7 +4,6 @@ ext.mainApp = true //如果此module为主app module，则启用这一行
 apply from: rootProject.file('cc-settings-2.gradle')
 
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -32,7 +31,10 @@ dependencies {
     testImplementation tests
     androidTestImplementation androidTests
 
-    addComponent 'modulelogin' //会默认添加依赖：project(':demo_component_a')
+    implementation project(':base_library')
+
+//    addComponent 'module_login' //会默认添加依赖：project(':demo_component_a')
+    addComponent 'module_a' //会默认添加依赖：project(':demo_component_a')
 //    addComponent 'demo_component_kt', project(':demo_component_kt') //module方式
 //    addComponent 'demo_component_b', 'com.billy.demo:demo_b:1.1.0'  //maven方式
 

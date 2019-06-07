@@ -2,48 +2,95 @@ package com.wyl.componentcc
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
+import android.widget.Toast
 import com.billy.cc.core.component.CC
-import kotlinx.android.synthetic.main.activity_main.*
+import com.billy.cc.core.component.CCResult
+import com.wyl.baselibrary.A
+import com.wyl.baselibrary.A_GET_INFO
+import com.wyl.baselibrary.A_GET_INFO3
+import com.wyl.baselibrary.A_SHOW_A_ACTIVITY
+import com.wyl.baselibrary.utils.JsonFormat
+import com.wyl.baselibrary.utils.logD
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
+
+    var cc: CC? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
 
-        button.setOnClickListener {
-            //同步调用，直接返回结果
-            funciton1()
-//            //或 异步调用，不需要回调结果
-//            val callId = CC.obtainBuilder("ComponentLogin")
-//                .setActionName("showActivity")
-//                .build()
-//                .callAsync()
-//            //或 异步调用，在子线程执行回调
-//            val callId = CC.obtainBuilder("ComponentLogin")
-//                .setActionName("showActivity")
-//                .build()
-//                .callAsync { cc, result ->
-//                    //此onResult在子线程中运行
-//                }
-//            //或 异步调用，在主线程执行回调
-//            val callId = CC.obtainBuilder("ComponentLogin")
-//                .setActionName("login")
-//                .build()
-//                .callAsyncCallbackOnMainThread { cc, result ->
-//                    //此onResult在主线程中运行
-//                    val toast = "login " + if (result.isSuccess) "success" else "failed"
-//                    Toast.makeText(this@MainActivity, toast, Toast.LENGTH_SHORT).show()
-//                }
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.btStartA -> {
+                // 同步调用A组件(页面跳转)
+                CC.obtainBuilder(A)
+                    .setActionName(A_SHOW_A_ACTIVITY)
+                    .build()
+                    .call()
+            }
+            R.id.btStartAAysnc -> {
+                // 异步调用A组件(页面跳转)
+                CC.obtainBuilder(A)
+                    .setActionName(A_SHOW_A_ACTIVITY)
+                    .build()
+                    .callAsync { _, result -> showResult(result) }
+//                    .callAsyncCallbackOnMainThread { _, result -> showResult(result) }
+            }
+            R.id.btGetA -> {
+                // 同步调用A组件(获取数据)
+                val result = CC.obtainBuilder(A)
+                    .setActionName(A_GET_INFO)
+                    .build()
+                    .call()
+                showResult(result)
+            }
+            R.id.btGetAAysnc -> {
+                // 异步调用A组件(获取数据)
+                CC.obtainBuilder(A)
+                    .setActionName(A_GET_INFO)
+                    .build()
+                    .callAsyncCallbackOnMainThread { _, result -> showResult(result) }
+//                    .callAsync { _, result -> showResult(result) }
+            }
+            R.id.btGetAAysnc3 -> {
+                // 异步调用A组件(慢请求3s)
+                if (cc != null) {
+                    cc!!.cancel()
+                    Toast.makeText(this, "取消成功", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                cc = CC.obtainBuilder(A)
+                    .setActionName(A_GET_INFO3)
+                    .build()
+                cc?.callAsync { _, result ->
+                    cc = null
+                    showResult(result)
+                }
+                Toast.makeText(this, "正在请求中...再次点击取消请求", Toast.LENGTH_SHORT).show()
+            }
+            else -> { // else is R.id.btGetA
+                //同步调用，直接返回结果
+                val result = CC.obtainBuilder("ComponentLogin")
+                    .setActionName("showActivity")
+                    .build()
+                    .call()
+            }
         }
     }
 
-    private fun funciton1() {
-        val result = CC.obtainBuilder("ComponentLogin")
-            .setActionName("showActivity")
-            .build()
-            .call()
+    private fun showResult(result: CCResult) {
+        var text = "result:\n" + JsonFormat.format(result.toString())
+        text += "\n\n---------------------\n\n"
+        logD(text)
+    }
+
+    override fun onDestroy() {
+        cc?.cancel()
+        super.onDestroy()
     }
 
 }
