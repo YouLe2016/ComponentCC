@@ -6,10 +6,7 @@ import android.view.View
 import android.widget.Toast
 import com.billy.cc.core.component.CC
 import com.billy.cc.core.component.CCResult
-import com.wyl.baselibrary.A
-import com.wyl.baselibrary.A_GET_INFO
-import com.wyl.baselibrary.A_GET_INFO3
-import com.wyl.baselibrary.A_SHOW_A_ACTIVITY
+import com.wyl.baselibrary.*
 import com.wyl.baselibrary.utils.JsonFormat
 import com.wyl.baselibrary.utils.logD
 
@@ -71,6 +68,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     showResult(result)
                 }
                 Toast.makeText(this, "正在请求中...再次点击取消请求", Toast.LENGTH_SHORT).show()
+            }
+            R.id.btLogin -> {
+                // 异步调用A组件(获取数据)
+                CC.obtainBuilder(A)
+                    .setActionName(A_LOGIN)
+                    .build()
+                    .callAsyncCallbackOnMainThread { _, result -> showResult(result) }
+//                    .callAsync { _, result -> showResult(result) }
             }
             else -> { // else is R.id.btGetA
                 //同步调用，直接返回结果

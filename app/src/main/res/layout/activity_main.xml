@@ -92,14 +92,31 @@
             android:layout_marginTop="8dp"/>
 
 
+    <Button
+            android:text="异步调A组件(模拟登录)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btLogin"
+            android:onClick="onClick"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:typeface="normal"
+            android:textAllCaps="false"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/btGetAAysnc3"/>
+
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
+            android:text="cc组件化Demo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/textView"/>
+            android:id="@+id/textView"
+            app:layout_constraintHorizontal_bias="0.952"
+            app:layout_constraintVertical_bias="0.977"
+            android:textSize="16sp"/>
 
 </android.support.constraint.ConstraintLayout>
